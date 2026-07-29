@@ -1,0 +1,265 @@
+
+
+CAHIER DES CHARGES – PROMPTFORGE AI (V1)
+1. Présentation du projet
+Nom provisoire
+PromptForge AI
+Description
+PromptForge AI est une plateforme web permettant aux utilisateurs de créer des prompts professionnels pour les modèles d'IA générative (ChatGPT, Gemini et autres).
+L'utilisateur n'a pas besoin de connaître le prompt engineering. Il répond simplement à une série de questions intelligentes, et l'application génère un prompt optimisé ainsi que des recommandations sur l'outil d'IA le plus adapté.
+2. Objectif du projet
+Permettre aux entrepreneurs, étudiants, graphistes et créateurs de contenu de générer rapidement des prompts professionnels pour créer des images de qualité.
+3. Public cible
+Entrepreneurs
+Étudiants
+Créateurs de contenu
+Community Managers
+Graphistes débutants
+Marketeurs
+Agences digitales
+4. Technologies
+Front-end
+HTML5
+CSS3
+Bootstrap
+JavaScript
+React.js
+Back-end
+Node.js
+Express.js
+Base de données
+MongoDB
+Authentification
+JWT
+Stockage des images
+Cloudinary (ou un service équivalent)
+5. Types d'utilisateurs
+Administrateur
+Peut :
+gérer les utilisateurs ;
+gérer les catégories ;
+modifier les modèles de prompts ;
+consulter les statistiques ;
+consulter les paiements.
+Utilisateur
+Peut :
+créer un compte ;
+se connecter ;
+générer des prompts ;
+enregistrer des favoris ;
+consulter son historique ;
+gérer son abonnement.
+6. Parcours utilisateur
+Écran 1 — Accueil
+Présentation de l'application.
+Contenu :
+slogan ;
+description ;
+avantages ;
+exemples de résultats ;
+bouton Essayer gratuitement ;
+bouton Connexion.
+Écran 2 — Inscription / Connexion
+Inscription par :
+email ;
+mot de passe.
+Connexion utilisateur.
+Écran 3 — Tableau de bord
+Message :
+Bonjour [Nom].
+Question principale :
+Que souhaitez-vous faire aujourd'hui ?
+Choix :
+Générer une image
+Modifier une image
+Photo produit
+Publicité
+Logo
+Portrait réaliste
+Personnage manga
+Miniature YouTube
+Publication Instagram
+Autre
+Écran 4 — Type de projet
+Question :
+Dans quel domaine se situe votre projet ?
+Choix :
+Entreprise
+Restaurant
+Immobilier
+Mode
+Cosmétique
+Technologie
+Éducation
+Santé
+Autre
+Écran 5 — Description du besoin
+Question :
+Décrivez précisément ce que vous souhaitez obtenir.
+Exemple :
+Je souhaite créer une publicité Facebook pour un parfum de luxe destiné aux femmes.
+Écran 6 — Import d'image (facultatif)
+L'utilisateur peut importer :
+une photo du produit ;
+un logo ;
+un croquis ;
+une image de référence.
+Cette image sert à enrichir le contexte du prompt.
+Écran 7 — Objectif final
+Question :
+Où allez-vous utiliser cette image ?
+Choix :
+Facebook
+Instagram
+TikTok
+Shopify
+Amazon
+Flyer
+Catalogue
+Site Web
+Autre
+Écran 8 — Style souhaité
+Question :
+Quel style recherchez-vous ?
+Choix :
+Réaliste
+Luxe
+Cinématique
+Minimaliste
+Cartoon
+Manga
+Pixar
+Studio Ghibli
+Futuriste
+3D
+Écran 9 — Choix de l'IA
+Question :
+Souhaitez-vous que PromptForge AI choisisse automatiquement le meilleur outil ?
+Choix :
+Oui (recommandation automatique)
+Non (choix manuel)
+Si choix manuel :
+ChatGPT
+Gemini
+Autre modèle compatible
+Le système affiche ensuite une recommandation et une courte explication.
+Écran 10 — Résumé
+Affichage :
+type de projet ;
+niche ;
+objectif ;
+style ;
+image importée ;
+IA recommandée.
+Bouton :
+Générer mon prompt
+Écran 11 — Résultat
+Affichage du prompt généré.
+Actions :
+Copier
+Télécharger (.txt)
+Ajouter aux favoris
+Modifier le prompt
+Générer une nouvelle version
+Écran 12 — Conseils
+Le système affiche automatiquement :
+l'IA recommandée ;
+les paramètres conseillés (format, qualité, ratio, etc.) ;
+des conseils pour obtenir un meilleur résultat.
+7. Historique
+Chaque utilisateur retrouve tous ses prompts générés.
+Fonctions :
+recherche ;
+suppression ;
+duplication.
+8. Favoris
+Possibilité d'ajouter un prompt aux favoris.
+9. Version gratuite
+5 générations gratuites.
+Au-delà :
+Invitation à passer Premium.
+10. Paiement
+Après paiement :
+activation du compte Premium ;
+accès illimité (ou selon la formule choisie).
+11. Tableau de bord Administrateur
+L'administrateur peut :
+consulter les utilisateurs ;
+consulter les paiements ;
+voir les statistiques ;
+modifier les catégories ;
+modifier les modèles de prompts.
+12. Statistiques
+Affichage de :
+nombre d'utilisateurs ;
+nombre de prompts générés ;
+catégories les plus utilisées ;
+taux de conversion vers Premium ;
+chiffre d'affaires.
+13. Fonctionnalités prévues pour la V1
+Authentification
+Génération de prompts
+Recommandation d'IA
+Import d'image
+Historique
+Favoris
+Version gratuite
+Paiement
+Tableau de bord administrateur
+14. Fonctionnalités non prévues pour la V1
+Génération directe d'images
+Génération de vidéos
+Chat IA intégré
+Application mobile
+Partage de prompts entre utilisateurs
+Réseau social interne
+Collaboration en équipe
+15. Vision du produit
+PromptForge AI n'est pas présenté comme un simple générateur de prompts.
+C'est un assistant intelligent qui accompagne l'utilisateur depuis son idée jusqu'à la création d'un prompt professionnel optimisé, tout en lui recommandant l'outil d'IA le plus adapté et les meilleures pratiques pour obtenir un résultat de qualité.
+Je terminerais par une seule amélioration : ajouter une fonctionnalité de retour utilisateur ("Ce prompt était-il utile ? 👍 / 👎" avec un champ de commentaire). Les retours permettront d'améliorer progressivement les modèles de prompts et d'identifier les besoins les plus fréquents. C'est une fonctionnalité simple à développer, mais très précieuse pour faire évoluer le produit dans la bonne direction.
+
+16. Gestion des abonnements
+L'application proposera deux niveaux d'accès : Gratuit et Premium.
+
+Compte Gratuit
+Tout nouvel utilisateur bénéficie automatiquement d'un compte gratuit après son inscription.
+
+Le compte gratuit permet de :
+
+générer jusqu'à 5 prompts au total ;
+accéder aux principales fonctionnalités de génération de prompts ;
+découvrir l'expérience utilisateur avant de passer à la version Premium.
+Une fois les 5 prompts consommés, l'utilisateur est invité à passer à l'offre Premium pour continuer à utiliser l'application.
+
+Compte Premium
+Le compte Premium est accessible via un paiement unique de 10 000 FCFA, donnant un accès à vie à la plateforme (selon les conditions de l'offre en vigueur).
+
+Les utilisateurs Premium bénéficient notamment de :
+
+générations de prompts illimitées ;
+accès à toutes les catégories de prompts disponibles ;
+accès aux futures améliorations de la plateforme incluses dans l'offre à vie (tant que cette offre reste maintenue) ;
+expérience sans limitation liée au nombre de générations.
+Après validation du paiement, le compte de l'utilisateur est automatiquement converti en Premium et toutes les fonctionnalités correspondantes sont immédiatement débloquées.
+
+Je te suggère également une petite amélioration : ne mentionne pas "10 000 FCFA à vie" partout dans ton code ou ton cahier des charges. À la place, écris :
+
+Le tarif de l'abonnement Premium est configurable par l'administrateur. Lors du lancement de la V1, il est fixé à 10 000 FCFA pour un accès à vie.
+
+Ainsi, si un jour tu décides de passer à 15 000 FCFA ou de proposer un abonnement mensuel, tu n'auras pas à modifier toute la logique de ton application. C'est une bonne pratique de conception qui te donnera plus de flexibilité.
+
+
+
+NB: 
+
+1- Je veux qu'après le codage de cette app tu me fournise le code source complet
+ front-end et back-end et comment tout mettre dans vscode pour avoir le même résultats
+ qu'ici . Les extensions et dépendences à installé . On utilisera html; css; boostrap5 ou tailwin; 
+react; nodejs; mongodb pour la consession de l'app de obtenir quelque chose d'attirant. 
+2- L'app seras en mesure de génerer
+ ces prompts à partir de grok; donc je te fournirrai la clé de l'api. 
+3- je vais publier l'app 
+sur netlify(frontend) et redder(backend); dit moi si c'est possible
+4- compte admin : mail: babioabdoul93@gmail.com
+                  password: @#Babio93#@

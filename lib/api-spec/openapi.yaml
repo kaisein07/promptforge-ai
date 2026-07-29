@@ -1,0 +1,717 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: PromptForge AI API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: prompts
+    description: Prompt generation and management
+  - name: admin
+    description: Admin operations
+  - name: payments
+    description: Payment operations
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # ─── Auth ───────────────────────────────────────────
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInput"
+      responses:
+        "201":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Prompts ─────────────────────────────────────────
+  /prompts:
+    get:
+      operationId: getPrompts
+      tags: [prompts]
+      summary: Get user's prompt history
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: favorites
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of prompts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Prompt"
+
+  /prompts/generate:
+    post:
+      operationId: generatePrompt
+      tags: [prompts]
+      summary: Generate a new prompt using AI
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PromptInput"
+      responses:
+        "201":
+          description: Generated prompt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prompt"
+        "402":
+          description: Free limit reached
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /prompts/{id}:
+    get:
+      operationId: getPrompt
+      tags: [prompts]
+      summary: Get a single prompt
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Prompt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prompt"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    delete:
+      operationId: deletePrompt
+      tags: [prompts]
+      summary: Delete a prompt
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /prompts/{id}/favorite:
+    patch:
+      operationId: toggleFavorite
+      tags: [prompts]
+      summary: Toggle favorite status of a prompt
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated prompt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prompt"
+
+  /prompts/{id}/feedback:
+    patch:
+      operationId: submitFeedback
+      tags: [prompts]
+      summary: Submit feedback on a prompt
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeedbackInput"
+      responses:
+        "200":
+          description: Updated prompt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prompt"
+
+  /prompts/{id}/duplicate:
+    post:
+      operationId: duplicatePrompt
+      tags: [prompts]
+      summary: Duplicate a prompt
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "201":
+          description: Duplicated prompt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prompt"
+
+  # ─── Admin ───────────────────────────────────────────
+  /admin/users:
+    get:
+      operationId: getAdminUsers
+      tags: [admin]
+      summary: List all users (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+  /admin/users/{id}:
+    patch:
+      operationId: updateAdminUser
+      tags: [admin]
+      summary: Update a user (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserUpdate"
+      responses:
+        "200":
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /admin/stats:
+    get:
+      operationId: getAdminStats
+      tags: [admin]
+      summary: Get platform statistics (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStats"
+
+  /admin/config:
+    get:
+      operationId: getAdminConfig
+      tags: [admin]
+      summary: Get admin configuration
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Config entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConfigEntry"
+
+    put:
+      operationId: updateAdminConfig
+      tags: [admin]
+      summary: Update admin configuration
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfigUpdate"
+      responses:
+        "200":
+          description: Updated config
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConfigEntry"
+
+  # ─── Payments ─────────────────────────────────────────
+  /payments:
+    get:
+      operationId: getPayments
+      tags: [payments]
+      summary: List payments (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Payment"
+
+    post:
+      operationId: createPayment
+      tags: [payments]
+      summary: Submit a payment request (pending admin approval)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentInput"
+      responses:
+        "201":
+          description: Payment request submitted and awaiting admin approval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+
+  /payments/{id}/approve:
+    put:
+      operationId: approvePayment
+      tags: [payments]
+      summary: Approve a payment and upgrade user to premium (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Payment approved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+
+  /payments/{id}/reject:
+    put:
+      operationId: rejectPayment
+      tags: [payments]
+      summary: Reject a payment (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Payment rejected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required:
+        - success
+
+    # ─── Auth ─────────────────────────────────────────
+    RegisterInput:
+      type: object
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        email:
+          type: string
+        password:
+          type: string
+          minLength: 6
+
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+
+    User:
+      type: object
+      required: [id, name, email, role, isPremium, promptsUsed, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+        isPremium:
+          type: boolean
+        promptsUsed:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    # ─── Prompts ──────────────────────────────────────
+    PromptInput:
+      type: object
+      required: [projectType, niche, description, destination, style]
+      properties:
+        projectType:
+          type: string
+        niche:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: ["string", "null"]
+        destination:
+          type: string
+        style:
+          type: string
+        aiPreference:
+          type: ["string", "null"]
+
+    Prompt:
+      type: object
+      required: [id, userId, projectType, niche, description, destination, style, generatedText, aiTool, isFavorite, createdAt]
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        projectType:
+          type: string
+        niche:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: ["string", "null"]
+        destination:
+          type: string
+        style:
+          type: string
+        aiPreference:
+          type: ["string", "null"]
+        aiTool:
+          type: string
+        generatedText:
+          type: string
+        aiTips:
+          type: ["string", "null"]
+        isFavorite:
+          type: boolean
+        feedback:
+          type: ["string", "null"]
+          enum: [positive, negative, null]
+        feedbackComment:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    FeedbackInput:
+      type: object
+      required: [feedback]
+      properties:
+        feedback:
+          type: string
+          enum: [positive, negative]
+        comment:
+          type: ["string", "null"]
+
+    # ─── Admin ────────────────────────────────────────
+    AdminUserUpdate:
+      type: object
+      properties:
+        isPremium:
+          type: boolean
+        role:
+          type: string
+          enum: [user, admin]
+
+    AdminStats:
+      type: object
+      required: [totalUsers, premiumUsers, totalPrompts, conversionRate, categoryCounts, revenue]
+      properties:
+        totalUsers:
+          type: integer
+        premiumUsers:
+          type: integer
+        totalPrompts:
+          type: integer
+        conversionRate:
+          type: number
+        revenue:
+          type: number
+        categoryCounts:
+          type: array
+          items:
+            type: object
+            required: [category, count]
+            properties:
+              category:
+                type: string
+              count:
+                type: integer
+
+    ConfigEntry:
+      type: object
+      required: [key, value]
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+
+    ConfigUpdate:
+      type: object
+      required: [entries]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigEntry"
+
+    # ─── Payments ─────────────────────────────────────
+    PaymentInput:
+      type: object
+      required: [transactionRef, amount, currency, phoneNumber, paymentMethod]
+      properties:
+        transactionRef:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        phoneNumber:
+          type: string
+        paymentMethod:
+          type: string
+        notes:
+          type: string
+
+    Payment:
+      type: object
+      required: [id, userId, transactionRef, amount, currency, status, createdAt]
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        userName:
+          type: string
+        userEmail:
+          type: string
+        transactionRef:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+        phoneNumber:
+          type: string
+        paymentMethod:
+          type: string
+        notes:
+          type: string
+        createdAt:
+          type: string
+          format: date-time

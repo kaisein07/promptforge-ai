@@ -1,0 +1,3 @@
+- [Zod v3 OpenAPI codegen](zod-v3-openapi.md) — never use `format: email` in OpenAPI spec; generates `zod.email()` which is Zod v4 syntax and breaks typecheck on v3
+- [Lib rebuild before artifact typecheck](lib-rebuild-order.md) — always run `pnpm run typecheck:libs` after changing any lib schema before running leaf artifact typechecks
+- [bcryptjs over bcrypt](bcrypt-choice.md) — use bcryptjs (pure JS) not bcrypt (native) to avoid pnpm build approval issues in Replit

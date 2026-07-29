@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "PromptForge AI"
+version = "1.0.0"
+id = "artifacts/promptforge"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23239
+
+[services.development]
+run = "pnpm --filter @workspace/promptforge run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/promptforge", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/promptforge/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23239"
+BASE_PATH = "/"
