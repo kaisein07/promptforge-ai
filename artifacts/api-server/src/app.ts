@@ -21,11 +21,22 @@ app.use(
   }),
 );
 
-// ✅ CORS corrigé : origin explicite + credentials: true
-cors({
-  origin: process.env["CLIENT_URL"],
-  credentials: true,
-}),
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const allowed = (process.env["CLIENT_URL"] ?? "")
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+      if (!origin || allowed.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
